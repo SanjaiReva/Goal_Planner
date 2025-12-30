@@ -15,9 +15,38 @@
             background: white;
             color: black;
             font-family: 'Arial', 'Helvetica', sans-serif;
-            padding: 60px 40px;
+            padding: 0;
             max-width: 1200px;
             margin: 0 auto;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+            padding: 30px 40px;
+            border-bottom: 1px solid black;
+        }
+
+        .nav-btn {
+            background: white;
+            color: black;
+            border: 1px solid black;
+            padding: 10px 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: black;
+            color: white;
+        }
+
+        .content {
+            padding: 60px 40px;
         }
 
         h1 {
@@ -164,9 +193,15 @@
     </style>
 </head>
 <body>
-    <h1>GOAL PLANNER</h1>
+    <div class="navbar">
+        <button class="nav-btn" onclick="newPlanner()">NEW</button>
+        <button class="nav-btn" onclick="showHistory()">HISTORY</button>
+    </div>
 
-    <div class="goal-section">
+    <div class="content">
+        <h1>GOAL PLANNER</h1>
+
+        <div class="goal-section">
         <div class="section-title">3 Months Goal</div>
         
         <div class="goal-field">
@@ -551,6 +586,20 @@
     </div>
 
     <script>
+        // New planner - clear all inputs
+        function newPlanner() {
+            if (confirm('Start a new planner? This will clear all current data.')) {
+                document.querySelectorAll('input[type="text"]').forEach(input => input.value = '');
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+                document.querySelectorAll('.progress-block').forEach(block => block.classList.remove('filled'));
+            }
+        }
+
+        // Show history
+        function showHistory() {
+            alert('History feature: This would show your saved goal planners. Note: Data persistence is not available in this demo version.');
+        }
+
         // Handle priority checkboxes (only one can be selected per group)
         document.querySelectorAll('.priority-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', function() {
