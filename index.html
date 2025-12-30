@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goal Planner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: white;
+            color: black;
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            letter-spacing: 2px;
+        }
+
+        .goal-section {
+            border-top: 1px solid black;
+            padding: 40px 0;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .goal-field {
+            margin-bottom: 25px;
+        }
+
+        .field-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .dotted-line {
+            border: none;
+            border-bottom: 1px dotted black;
+            width: 100%;
+            height: 30px;
+            outline: none;
+            font-size: 14px;
+            padding: 0 0 5px 0;
+        }
+
+        .solid-line {
+            border: none;
+            border-bottom: 1px solid black;
+            width: 200px;
+            height: 30px;
+            outline: none;
+            font-size: 14px;
+            padding: 0 0 5px 0;
+        }
+
+        .priority-options {
+            display: flex;
+            gap: 30px;
+            margin-top: 8px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            border: 1px solid black;
+            background: white;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            position: relative;
+        }
+
+        .checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: -2px;
+            left: 2px;
+            font-size: 16px;
+            color: black;
+        }
+
+        .progress-bar {
+            display: flex;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .progress-block {
+            width: 30px;
+            height: 30px;
+            border: 1px solid black;
+            background: white;
+            cursor: pointer;
+        }
+
+        .progress-block.filled {
+            background: black;
+        }
+
+        .weekly-breakdown {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px 20px;
+            margin-top: 8px;
+        }
+
+        .week-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .action-steps {
+            margin-top: 8px;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .action-line {
+            border: none;
+            border-bottom: 1px solid black;
+            flex: 1;
+            height: 25px;
+            outline: none;
+            font-size: 13px;
+            padding: 0 0 5px 0;
+        }
+
+        @media print {
+            body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>GOAL PLANNER</h1>
+
+    <div class="goal-section">
+        <div class="section-title">3 Months Goal</div>
+        
+        <div class="goal-field">
+            <div class="field-label">Goal:</div>
+            <input type="text" class="dotted-line">
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Date:</div>
+            <input type="text" class="solid-line">
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Priority:</div>
+            <div class="priority-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox priority-checkbox" data-group="3m">
+                    <span>Low</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox priority-checkbox" data-group="3m">
+                    <span>Medium</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox priority-checkbox" data-group="3m">
+                    <span>High</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Progress:</div>
+            <div class="progress-bar">
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+            </div>
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Weekly Breakdown:</div>
+            <div class="weekly-breakdown">
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 1</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 2</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 3</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 4</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 5</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 6</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 7</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 8</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 9</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 10</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 11</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 12</div>
+            </div>
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Action Steps:</div>
+            <div class="action-steps">
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="goal-section">
+        <div class="section-title">6 Months Goal</div>
+        
+        <div class="goal-field">
+            <div class="field-label">Goal:</div>
+            <input type="text" class="dotted-line">
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Date:</div>
+            <input type="text" class="solid-line">
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Priority:</div>
+            <div class="priority-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox priority-checkbox" data-group="6m">
+                    <span>Low</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox priority-checkbox" data-group="6m">
+                    <span>Medium</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox priority-checkbox" data-group="6m">
+                    <span>High</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Progress:</div>
+            <div class="progress-bar">
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+            </div>
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Weekly Breakdown:</div>
+            <div class="weekly-breakdown">
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 1</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 2</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 3</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 4</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 5</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 6</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 7</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 8</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 9</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 10</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 11</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 12</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 13</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 14</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 15</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 16</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 17</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 18</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 19</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 20</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 21</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 22</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 23</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 24</div>
+            </div>
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Action Steps:</div>
+            <div class="action-steps">
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="goal-section">
+        <div class="section-title">9 Months Goal</div>
+        
+        <div class="goal-field">
+            <div class="field-label">Goal:</div>
+            <input type="text" class="dotted-line">
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Date:</div>
+            <input type="text" class="solid-line">
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Priority:</div>
+            <div class="priority-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox priority-checkbox" data-group="9m">
+                    <span>Low</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox priority-checkbox" data-group="9m">
+                    <span>Medium</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox priority-checkbox" data-group="9m">
+                    <span>High</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Progress:</div>
+            <div class="progress-bar">
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+            </div>
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Weekly Breakdown:</div>
+            <div class="weekly-breakdown">
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 1</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 2</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 3</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 4</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 5</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 6</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 7</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 8</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 9</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 10</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 11</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 12</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 13</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 14</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 15</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 16</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 17</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 18</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 19</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 20</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 21</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 22</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 23</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 24</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 25</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 26</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 27</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 28</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 29</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 30</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 31</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 32</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 33</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 34</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 35</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 36</div>
+            </div>
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Action Steps:</div>
+            <div class="action-steps">
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="goal-section">
+        <div class="section-title">12 Months Goal</div>
+        
+        <div class="goal-field">
+            <div class="field-label">Goal:</div>
+            <input type="text" class="dotted-line">
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Date:</div>
+            <input type="text" class="solid-line">
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Priority:</div>
+            <div class="priority-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox priority-checkbox" data-group="12m">
+                    <span>Low</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox priority-checkbox" data-group="12m">
+                    <span>Medium</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox priority-checkbox" data-group="12m">
+                    <span>High</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Progress:</div>
+            <div class="progress-bar">
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+                <div class="progress-block"></div>
+            </div>
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Weekly Breakdown:</div>
+            <div class="weekly-breakdown">
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 1</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 2</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 3</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 4</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 5</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 6</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 7</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 8</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 9</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 10</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 11</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 12</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 13</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 14</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 15</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 16</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 17</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 18</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 19</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 20</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 21</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 22</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 23</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 24</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 25</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 26</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 27</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 28</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 29</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 30</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 31</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 32</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 33</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 34</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 35</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 36</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 37</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 38</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 39</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 40</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 41</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 42</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 43</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 44</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 45</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 46</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 47</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 48</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 49</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 50</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 51</div>
+                <div class="week-item"><input type="checkbox" class="checkbox"> Week 52</div>
+            </div>
+        </div>
+
+        <div class="goal-field">
+            <div class="field-label">Action Steps:</div>
+            <div class="action-steps">
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+                <div class="action-item"><input type="checkbox" class="checkbox"> <input type="text" class="action-line"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handle priority checkboxes (only one can be selected per group)
+        document.querySelectorAll('.priority-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    const group = this.dataset.group;
+                    document.querySelectorAll(`.priority-checkbox[data-group="${group}"]`).forEach(cb => {
+                        if (cb !== this) cb.checked = false;
+                    });
+                }
+            });
+        });
+
+        // Handle progress bar blocks
+        document.querySelectorAll('.progress-bar').forEach(bar => {
+            const blocks = bar.querySelectorAll('.progress-block');
+            blocks.forEach((block, index) => {
+                block.addEventListener('click', function() {
+                    // Toggle this block and all previous blocks
+                    const isCurrentlyFilled = block.classList.contains('filled');
+                    
+                    blocks.forEach((b, i) => {
+                        if (i <= index) {
+                            if (isCurrentlyFilled) {
+                                b.classList.remove('filled');
+                            } else {
+                                b.classList.add('filled');
+                            }
+                        } else {
+                            b.classList.remove('filled');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
